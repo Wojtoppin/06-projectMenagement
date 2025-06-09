@@ -22,21 +22,26 @@ function App() {
         dueDate: dueDate,
         id: Math.random()
       }
-      return { ...prevProjectState, projects: [...prevProjectState.projects, newProject] };
+      return { ...prevProjectState, projects: [...prevProjectState.projects, newProject], selectedProject: undefined };
     });
   };
-  console.log(projectState)
+
+  const handleCancelProject = () =>{
+    setProjectState(prevProjectState => {return { ...prevProjectState, selectedProject: undefined }});
+  }
+
+
   let content;
 
   if (projectState.selectedProject === null) {
-    content = <NewProject handleAddProject={handleAddProject}/>;
+    content = <NewProject handleAddProject={handleAddProject} handleCancelProject={handleCancelProject}/>;
   } else if (projectState.selectedProject === undefined) {
     content = <NoProjectSelected handleClick={handleNewProjectSelection} />;
   }
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <Sidebar handleClick={handleNewProjectSelection} />
+      <Sidebar handleClick={handleNewProjectSelection} projects={projectState.projects}/>
       {content}
     </main>
   );
